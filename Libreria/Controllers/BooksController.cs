@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Libreria.Models.Entities;
-
+using Libreria.Application.Models.Requests;
 namespace ParadigmiLibreria.Controllers
 {
     [ApiController]
@@ -44,9 +44,9 @@ namespace ParadigmiLibreria.Controllers
 
         [HttpPut]
         [Route("new")]
-        public IActionResult CreateBook(Book book)
+        public IActionResult CreateBook(CreateBookRequest book)
         {
-            _books.Add(book);
+            _books.Add(book.toEntity());
             return Ok();
         }
     }

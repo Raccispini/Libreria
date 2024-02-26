@@ -10,4 +10,8 @@
     <Folder Include="Middlewares\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Libreria.Models\Libreria.Models.csproj" />
+  </ItemGroup>
+
 </Project>

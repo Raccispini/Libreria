@@ -8,7 +8,7 @@ namespace Libreria.Models.Entities
     {
 
 
-        public int id { get; set; }
+        public int? id { get; set; }
 
         public string title { get; set; } = string.Empty;
 
