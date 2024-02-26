@@ -1,3 +1,6 @@
+using Libreria.Application.Middlewares;
+using Libreria.Application.Services;
+using Libreria.Application.Abstractions.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddScoped<IBookService, BookService>();
+
 var app = builder.Build();
+app.UseMiddleware<MiddlewareExample>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

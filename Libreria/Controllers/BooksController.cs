@@ -49,5 +49,13 @@ namespace ParadigmiLibreria.Controllers
             _books.Add(book.toEntity());
             return Ok();
         }
+        [HttpPost]
+        [Route("edit")]
+        public IActionResult EditBook(EditBookRequest request)
+        {
+            // TODO: dfgsf
+            return Ok();
+        }
+
     }
 }
