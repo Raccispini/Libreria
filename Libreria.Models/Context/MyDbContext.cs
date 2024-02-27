@@ -10,12 +10,22 @@ namespace Libreria.Models.Context
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+        public MyDbContext() :base()
+        {
+            
+        }
+
+        public MyDbContext(DbContextOptions<MyDbContext> config) : base(config)
+        {
+            
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("data source=localhost;Initial catalog=libreria;User Id=paradigmi;Password=paradigmi;TrustServerCertificate=True;Trusted_Connection=True;", options =>
+            /*optionsBuilder.UseSqlServer("data source=localhost;Initial catalog=libreria;User Id=paradigmi;Password=paradigmi;TrustServerCertificate=True;Trusted_Connection=True;", options =>
             {
                 options.EnableRetryOnFailure();
-            });
+            });*/
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

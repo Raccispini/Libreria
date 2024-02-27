@@ -8,6 +8,6 @@ namespace Libreria.Application.Abstractions
 {
     internal interface GeneralRequest<T> where T : class
     {
-        public T toEntity();
+        public T ToEntity();
     }
 }

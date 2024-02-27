@@ -8,8 +8,13 @@ namespace Libreria.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("cateogiries");
+            builder.ToTable("Categories");
             builder.HasKey(x => x.id);
+
+            builder.Property(x => x.id).ValueGeneratedOnAdd();
+
+            builder.Property(x => x.name).HasColumnName("name");
+
         }
     }
 }

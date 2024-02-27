@@ -22,12 +22,12 @@ namespace Libreria.Models.Configurations
             builder.HasMany(e => e.categories)
                 .WithMany(e => e.books)
                 .UsingEntity(
-                    "bookCategory",
-                    l => l.HasOne(typeof(Category)).WithMany().HasForeignKey("CategoryId").HasPrincipalKey(nameof(Category.id)),
-                    r => r.HasOne(typeof(Book)).WithMany().HasForeignKey("BookId").HasPrincipalKey(nameof(Book.id)),
-                    j => j.HasKey("BookId", "CategoryId"));
+                    "BookCategory",
+                    l => l.HasOne(typeof(Category)).WithMany().HasForeignKey("idCategory").HasPrincipalKey(nameof(Category.id)),
+                    r => r.HasOne(typeof(Book)).WithMany().HasForeignKey("idBook").HasPrincipalKey(nameof(Book.id)),
+                    j => j.HasKey("idBook", "idCategory"));
 
-
+            
 
             builder.Property(x => x.relase).HasColumnName("date");
             builder.Property(x => x.title).HasColumnName("title");

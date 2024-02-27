@@ -1,10 +1,10 @@
-﻿using Libreria.Application.Abstractions;
-using Libreria.Models.Entities;
+﻿using Libreria.Models.Entities;
 
 namespace Libreria.Application.Models.Requests
 {
-    public class CreateUserRequest :GeneralRequest<User>
+    public class EditUserRequest
     {
+        public int Id { get; set; }
 
         public string username { get; set; } = String.Empty;
         public string password { get; set; } = String.Empty;
@@ -16,6 +16,7 @@ namespace Libreria.Application.Models.Requests
         public User ToEntity()
         {
             var user = new User();
+            user.id = Id;
             user.username = username;
             user.password = password;
             user.name = name;

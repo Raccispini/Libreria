@@ -7,7 +7,7 @@ namespace Libreria.Application.Models.Requests
     {
         public string name { get; set; } = String.Empty;
 
-        public Category toEntity()
+        public Category ToEntity()
         {
             var category = new Category();
             category.name = name;

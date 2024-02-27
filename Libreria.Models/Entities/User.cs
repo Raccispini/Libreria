@@ -6,9 +6,7 @@ namespace Libreria.Models.Entities
 {
     public class User
     {
-        public int id { get; set; }
-
-        public string email { get; set; } = String.Empty;
+        public int? id { get; set; }
 
         public string username { get; set; } = String.Empty;
         public string password { get; set; } = String.Empty;

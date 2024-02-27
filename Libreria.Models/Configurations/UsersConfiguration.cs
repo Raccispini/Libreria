@@ -8,8 +8,15 @@ namespace Libreria.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("users");
+            builder.ToTable("Users");
             builder.HasKey(x => x.id);
+
+            builder.Property(x => x.id).ValueGeneratedOnAdd();
+
+            builder.Property(x => x.username).HasColumnName("username");
+            builder.Property(x => x.password).HasColumnName("password");
+            builder.Property(x => x.name).HasColumnName("name");
+            builder.Property(x => x.surname).HasColumnName("surname");
         }
     }
 }

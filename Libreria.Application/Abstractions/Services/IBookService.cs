@@ -9,6 +9,10 @@ namespace Libreria.Application.Abstractions.Services
 {
     public interface IBookService
     {
-        List<Book> getBooks();
+        ICollection<Book> getBooks();
+        void AddBook(Book book);
+        void EditBook(Book book);
+        void RemoveBook(int id);
+        Book GetBook(int id);
     }
 }

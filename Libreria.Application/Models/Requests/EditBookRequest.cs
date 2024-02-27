@@ -17,7 +17,7 @@ namespace Libreria.Application.Models.Requests
 
         public ICollection<Category>? categories { get; set; } = [];
 
-        public Book toEntity()
+        public Book ToEntity()
         {
             var book = new Book();
             book.id = id;

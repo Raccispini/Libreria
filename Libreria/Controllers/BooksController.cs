@@ -1,59 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Libreria.Models.Entities;
 using Libreria.Application.Models.Requests;
+using Libreria.Application.Services;
+using Azure.Core;
+using Libreria.Application.Abstractions.Services;
 namespace ParadigmiLibreria.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
     public class BooksController:ControllerBase
     {
-        private List<Book> _books = new List<Book>();
-
-        public BooksController()
+        private readonly IBookService _bookService;
+        public BooksController(IBookService bookService)
         {
-            _books.Add(new Book()
-            {
-                id = 1,
-                title = "prova",
-                author = "prova autore",
-                publisher = "prova publisher",
-                relase = new DateTime()
-            });
-            _books.Add(new Book()
-            {
-                id = 2,
-                title = "prova 2",
-                author = "prova autore 2",
-                publisher = "prova publisher 2",
-                relase = new DateTime()
-            });
+            _bookService = bookService;
+            
         }
         [HttpGet]
-        [Route("list")]
+        [Route("GetAll")]
         public IEnumerable<Book> getLibri()
         {
-            return _books;
+            return _bookService.getBooks();
         }
 
         [HttpGet]
         [Route("get/{id:int}")]
         public Book getBook(int id)
         {
-            return _books.Where(x=>x.id == id).First();
+            //return _books.Where(x=>x.id == id).First();
+            return _bookService.GetBook(id);
         }
 
         [HttpPut]
-        [Route("new")]
-        public IActionResult CreateBook(CreateBookRequest book)
+        [Route("New")]
+        public IActionResult CreateBook(CreateBookRequest request)
         {
-            _books.Add(book.toEntity());
-            return Ok();
+            var book = request.ToEntity();
+            _bookService.AddBook(book);
+            return Ok(book);
         }
         [HttpPost]
-        [Route("edit")]
+        [Route("Edit")]
         public IActionResult EditBook(EditBookRequest request)
         {
-            // TODO: dfgsf
+            var book = request.ToEntity();
+            _bookService.EditBook(book);
+            return Ok(book);
+        }
+        [HttpDelete]
+        [Route("Delete")]
+        public IActionResult DeleteBook(int id)
+        {
+            _bookService.RemoveBook(id);
             return Ok();
         }
 
