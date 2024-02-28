@@ -35,7 +35,8 @@ namespace Libreria.Models.Repository
 
         public void Modifica(T entity)
         {
-            _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+           _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            
         }
         public void SaveChanges()
         {

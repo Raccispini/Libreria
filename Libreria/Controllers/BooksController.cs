@@ -4,6 +4,9 @@ using Libreria.Application.Models.Requests;
 using Libreria.Application.Services;
 using Azure.Core;
 using Libreria.Application.Abstractions.Services;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
 namespace ParadigmiLibreria.Controllers
 {
     [ApiController]
@@ -18,9 +21,10 @@ namespace ParadigmiLibreria.Controllers
         }
         [HttpGet]
         [Route("GetAll")]
-        public IEnumerable<Book> getLibri()
+        public ICollection<Book> getLibri()
         {
-            return _bookService.getBooks();
+            var books = _bookService.getBooks();
+            return books;
         }
 
         [HttpGet]
@@ -42,10 +46,8 @@ namespace ParadigmiLibreria.Controllers
         [HttpPost]
         [Route("Edit")]
         public IActionResult EditBook(EditBookRequest request)
-        {
-            var book = request.ToEntity();
-            _bookService.EditBook(book);
-            return Ok(book);
+        {     
+            return Ok(_bookService.EditBook(request.ToEntity()));
         }
         [HttpDelete]
         [Route("Delete")]
@@ -54,6 +56,17 @@ namespace ParadigmiLibreria.Controllers
             _bookService.RemoveBook(id);
             return Ok();
         }
-
+        [HttpPost]
+        [Route("Find")]
+        public IActionResult FindBook(FindBookRequest request)
+        {
+             var book = request.ToEntity();
+            if (request.after >= request.before)
+            {
+                return BadRequest("Le date sono discordanti");
+            }
+             return Ok(_bookService.Find(book,request.after,request.before));
+        }
+        
     }
 }

@@ -3,28 +3,25 @@ using Libreria.Models.Entities;
 
 namespace Libreria.Application.Models.Requests
 {
-    public class EditBookRequest:GeneralRequest<Book>
+    public class FindBookRequest:GeneralRequest<Book>
     {
-        public int id { get; set; }
-
+        public int? id { get; set; } = null;
         public string? title { get; set; } = string.Empty;
-
-        public string? author { get; set; } = string.Empty;
-
+        public string? author { get; set; }= string.Empty;
         public string? publisher { get; set; } = string.Empty;
-
-        public DateTime? relase { get; set; } = DateTime.MaxValue;
-
-        public ICollection<Category>? categories { get; set; } = [];
+        //range di date da cercare
+        public DateTime? before { get; set; }= DateTime.MaxValue;
+        public DateTime? after { get; set;}=DateTime.MinValue;
+        //categorie che deve avere il libro
+        public ICollection<Category>? categories { get; set; } = new List<Category>();
 
         public Book ToEntity()
         {
             var book = new Book();
             book.id = id;
-            book.title = title;
             book.author = author;
+            book.title = title;
             book.publisher = publisher;
-            book.relase = (DateTime)relase;
             book.categories = categories;
             return book;
         }

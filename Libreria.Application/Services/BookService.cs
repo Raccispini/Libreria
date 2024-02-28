@@ -1,4 +1,5 @@
 ﻿using Libreria.Application.Abstractions.Services;
+using Libreria.Application.Models.Requests;
 using Libreria.Models.Entities;
 using Libreria.Models.Repository;
 using System;
@@ -23,9 +24,14 @@ namespace Libreria.Application.Services
             _bookRepository.SaveChanges();
         }
 
-        public void EditBook(Book book)
+        public Book EditBook(Book book)
         {
-            _bookRepository.Modifica(book);
+            return _bookRepository.Modifica(book);
+        }
+
+        public ICollection<Book> Find(Book book,DateTime? after, DateTime? before)
+        {
+            return _bookRepository.findBook(book,after,before);
         }
 
         public Book GetBook(int id)
@@ -47,5 +53,7 @@ namespace Libreria.Application.Services
         {
             return _bookRepository.GetAll();
         }
+
+        
     }
 }
