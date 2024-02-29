@@ -31,12 +31,13 @@ namespace Libreria.Models.Repository
         {
             var entity = Ottieni(id);
             _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            SaveChanges();
         }
 
         public void Modifica(T entity)
         {
            _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            
+            SaveChanges();
         }
         public void SaveChanges()
         {

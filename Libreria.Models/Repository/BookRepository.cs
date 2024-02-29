@@ -120,21 +120,51 @@ namespace Libreria.Models.Repository
             }
             if (book.categories.Count()==0)
             {
-                //var tmp = libro.categories;
-                //foreach(var category in tmp)
-                //{
-                //    libro.categories.Remove(category);
-                //}
-                foreach(var category in book.categories)
+                libro.categories = new List<Category>();
+                var tmp = book.categories;
+                foreach(var category in tmp)
                 {
+                    if (!_context.Categories.Contains(category) && (category.name != String.Empty || category.name != null))
+                    {
+                        category.id = null;
+                        _context.Categories.Add(category);
+                        _context.SaveChanges();
+                    }
                     libro.categories.Add(category);
                 }
             }
+            libro.categories = book.categories;
             _context.Update(libro);
             SaveChanges();
-            libro.categories = book.categories;
             return libro;
         }
+
+        public new void Aggiungi(Book book)
+        {
+            var categories = book.categories;
+            book.categories = [];
+            _context.Books.Add(book);
+            ICollection<Category> tmp = new List<Category>();
+            foreach (var category in categories)
+            {
+                if (!_context.Categories.Contains(category) && (category.name!=String.Empty || category.name!=null))
+                {
+                    category.id = null;
+                    _context.Categories.Add(category);
+                    _context.SaveChanges();
+                }
+                tmp.Add(_context.Categories.Where(x=>x.id==category.id).FirstOrDefault());
+            }
+            _context.SaveChanges(); 
+            book.categories = tmp;
+            _context.Entry(book).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+        }
+        //public new void Elimina(int id)
+        //{
+        //    var book = _context.Books.Find(id);
+        //    _context.Books.Remove(book);
+        //}
     }
 
 }

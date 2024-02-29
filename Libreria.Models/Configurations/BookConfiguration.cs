@@ -24,7 +24,7 @@ namespace Libreria.Models.Configurations
                 .UsingEntity(
                     "BookCategory",
                     l => l.HasOne(typeof(Category)).WithMany().HasForeignKey("idCategory").HasPrincipalKey(nameof(Category.id)),
-                    r => r.HasOne(typeof(Book)).WithMany().HasForeignKey("idBook").HasPrincipalKey(nameof(Book.id)),
+                    r => r.HasOne(typeof(Book)).WithMany().HasForeignKey("idBook").HasPrincipalKey(nameof(Book.id)).OnDelete(DeleteBehavior.Cascade),
                     j => j.HasKey("idBook", "idCategory"));
 
             

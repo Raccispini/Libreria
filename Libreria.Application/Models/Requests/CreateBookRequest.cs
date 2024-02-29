@@ -19,7 +19,7 @@ namespace Libreria.Application.Models.Requests
 
         public DateTime relase { get; set; } = DateTime.Now;
 
-        public ICollection<CreateCategoryRequest> categories { get; set; } = [];
+        public ICollection<CategoryRequest> categories { get; set; } = [];
 
         public Book ToEntity()
         {
