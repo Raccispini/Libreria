@@ -18,7 +18,6 @@ namespace Libreria.Models.Repository
             
             foreach (var book in books)
             {
-
                 var categories = base._context.Books
                     .Where(x=>x.id == book.id)
                     .SelectMany(b => b.categories) 
@@ -47,7 +46,7 @@ namespace Libreria.Models.Repository
             return book;
         }
 
-        public ICollection<Book> findBook(Book book, DateTime? after,DateTime? before)
+        public ICollection<Book> findBook(Book book, DateTime? after,DateTime? before, int pageSize,int pageCount)
         {
             List<Book> result = new List<Book>();
             var books = base._context.Books;
@@ -94,7 +93,9 @@ namespace Libreria.Models.Repository
                 } 
                 
             }
-
+            result = result.Skip((pageCount - 1) * pageSize) // Salta i libri delle pagine precedenti
+                .Take(pageSize) // Prendi solo i prossimi 10 libri
+                .ToList();
             return result;
         }
 
@@ -165,6 +166,7 @@ namespace Libreria.Models.Repository
         //    var book = _context.Books.Find(id);
         //    _context.Books.Remove(book);
         //}
+        
     }
 
 }

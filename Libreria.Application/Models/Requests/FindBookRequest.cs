@@ -15,8 +15,8 @@ namespace Libreria.Application.Models.Requests
         //categorie che deve avere il libro
         public ICollection<Category>? categories { get; set; } = new List<Category>();
 
-        public int? pageSize { get; set; } = 5;
-        public int? pageCount { get; set; } = 0;
+        public int pageSize { get; set; } = 5;
+        public int pageCount { get; set; } = 0;
         public Book ToEntity()
         {
             var book = new Book();

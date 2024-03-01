@@ -15,6 +15,6 @@ namespace Libreria.Application.Abstractions.Services
         Book EditBook(Book book);
         void RemoveBook(int id);
         Book GetBook(int id);
-        ICollection<Book> Find(Book book,DateTime? after, DateTime? before);
+        ICollection<Book> Find(Book book,DateTime? after, DateTime? before,int pageSize,int pageCount);
     }
 }

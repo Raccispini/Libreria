@@ -14,7 +14,8 @@ namespace Libreria.Models.Repository
 
         public ICollection<T> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return _context.Set<T>()
+                .ToList();
         }
 
         public void Aggiungi(T entity)

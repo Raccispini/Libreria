@@ -20,15 +20,16 @@ namespace ParadigmiLibreria.Controllers
             
         }
         [HttpGet]
-        [Route("GetAll")]
-        public ICollection<Book> getLibri()
+        [Route("All")]
+        public ICollection<Book> getLibri( )
         {
+
             var books = _bookService.getBooks();
             return books;
         }
 
         [HttpGet]
-        [Route("get/{id:int}")]
+        [Route("Get/{id:int}")]
         public Book getBook(int id)
         {
             //return _books.Where(x=>x.id == id).First();
@@ -65,7 +66,7 @@ namespace ParadigmiLibreria.Controllers
             {
                 return BadRequest("Le date sono discordanti");
             }
-             return Ok(_bookService.Find(book,request.after,request.before));
+             return Ok(_bookService.Find(book,request.after,request.before,request.pageSize,request.pageCount));
         }
         
     }

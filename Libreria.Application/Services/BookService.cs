@@ -29,9 +29,9 @@ namespace Libreria.Application.Services
             return _bookRepository.Modifica(book);
         }
 
-        public ICollection<Book> Find(Book book,DateTime? after, DateTime? before)
+        public ICollection<Book> Find(Book book,DateTime? after, DateTime? before,int pageSize,int pageCount)
         {
-            return _bookRepository.findBook(book,after,before);
+            return _bookRepository.findBook(book,after,before,pageSize,pageCount);
         }
 
         public Book GetBook(int id)
