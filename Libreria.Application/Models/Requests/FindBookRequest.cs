@@ -27,5 +27,15 @@ namespace Libreria.Application.Models.Requests
             book.categories = categories;
             return book;
         }
+        public bool AtLeasOneFilter()
+        {
+            if (title == string.Empty &&
+                author == string.Empty &&
+                before == DateTime.MaxValue &&
+                after == DateTime.MinValue &&
+                categories.Count() == 0)
+                return false;
+            return true;
+        }
     }
 }

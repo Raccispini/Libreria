@@ -5,7 +5,7 @@ namespace Libreria.Application.Models.Requests
 {
     public class EditBookRequest:GeneralRequest<Book>
     {
-        public int id { get; set; }
+        public int? id { get; set; } 
 
         public string? title { get; set; } = string.Empty;
 
@@ -15,7 +15,7 @@ namespace Libreria.Application.Models.Requests
 
         public DateTime? relase { get; set; } = DateTime.MaxValue;
 
-        public ICollection<Category>? categories { get; set; } = [];
+        public ICollection<EditBookCategoriesRequest>? categories { get; set; } = [];
 
         public Book ToEntity()
         {
@@ -25,8 +25,23 @@ namespace Libreria.Application.Models.Requests
             book.author = author;
             book.publisher = publisher;
             book.relase = (DateTime)relase;
-            book.categories = categories;
+            foreach(var item in categories)
+            {
+                book.categories.Add(item.ToEntity());
+            }
+            
             return book;
+        }
+        public class EditBookCategoriesRequest
+        {
+            public string name { get; set; }
+            public Category ToEntity()
+            {
+                return new Category()
+                {
+                    name = this.name,
+                };
+            }
         }
     }
 }

@@ -17,6 +17,8 @@ namespace Libreria.Application.Services.Validators
                 .NotEmpty()
                 .GreaterThan(1)
                 .WithMessage("Valore pageSize non valido");
+            RuleFor(x => x.after).GreaterThan(x => x.before).
+                WithMessage("Il range di date non è valido");
         }
     }
 }

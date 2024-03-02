@@ -59,7 +59,7 @@ namespace Libreria.Web.Controllers
             return Unauthorized();
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("Signup")]
         public IActionResult registrazione(SignUpRequest request)
         {

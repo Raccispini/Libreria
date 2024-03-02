@@ -36,7 +36,14 @@ namespace Libreria.Application.Services
         {
             return _categoryRepository.GetAll();
         }
-
+        public Category GetCategory(int id)
+        {
+            return _categoryRepository.Ottieni(id);
+        }
+        public Category GetCategoryByName(string name)
+        {
+            return _categoryRepository.GetByName(name);
+        }
         
     }
 }

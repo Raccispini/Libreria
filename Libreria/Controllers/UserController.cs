@@ -34,7 +34,7 @@ namespace Libreria.Web.Controllers
             return Ok(_userService.GetAll());
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("New")]
         public IActionResult NewUser(CreateUserRequest request)
         {
@@ -42,7 +42,7 @@ namespace Libreria.Web.Controllers
             _userService.Add(user);
             return Ok(user);
         }
-        [HttpPost]
+        [HttpPut]
         [Route("Edit")]
         public IActionResult EditUser(CreateUserRequest request)
         {

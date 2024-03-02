@@ -3,6 +3,7 @@ using Libreria.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.VisualBasic;
+using System.Reflection.Metadata.Ecma335;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Libreria.Models.Repository
@@ -102,39 +103,43 @@ namespace Libreria.Models.Repository
         public Book Modifica(Book book)
         {
             //var libro = _context.Books.Find(book.id);
-            var libro = _context.Books.Include(x => x.categories).FirstOrDefault(x => x.id == book.id);
-            if (book.title != String.Empty)
+            Book libro;
+            try
             {
-                libro.title=book.title;
+                libro = _context.Books.Include(x => x.categories).First(x => x.id == book.id);
             }
-            if (book.author != String.Empty)
+            catch
             {
-                libro.author = book.author;
+                return null;
             }
-            if (book.publisher != String.Empty)
+            
+            libro.title=book.title;           
+            libro.author = book.author;
+            libro.publisher = book.publisher;
+            libro.relase = book.relase;
+            libro.categories = new List<Category>();
+            var tmp = book.categories;
+            foreach(var category in tmp)
             {
-                libro.publisher = book.publisher;
-            }
-            if (book.relase != DateTime.MaxValue)
-            {
-                libro.relase = book.relase;
-            }
-            if (book.categories.Count()==0)
-            {
-                libro.categories = new List<Category>();
-                var tmp = book.categories;
-                foreach(var category in tmp)
+                Category cat;
+                try
                 {
-                    if (!_context.Categories.Contains(category) && (category.name != String.Empty || category.name != null))
-                    {
-                        category.id = null;
-                        _context.Categories.Add(category);
-                        _context.SaveChanges();
-                    }
+                    cat = _context.Categories.Where(x => x.name == category.name).First();
+                }
+                catch
+                {
+                    cat = null;
+                }
+                if (cat == null)
+                {
+                    _context.Categories.Add(category);
+                    _context.SaveChanges();
                     libro.categories.Add(category);
                 }
+                libro.categories.Add(cat);
             }
-            libro.categories = book.categories;
+            
+            //libro.categories = book.categories;
             _context.Update(libro);
             SaveChanges();
             return libro;
@@ -148,13 +153,26 @@ namespace Libreria.Models.Repository
             ICollection<Category> tmp = new List<Category>();
             foreach (var category in categories)
             {
-                if (!_context.Categories.Contains(category) && (category.name!=String.Empty || category.name!=null))
+                Category cat;
+                try
                 {
-                    category.id = null;
+                    cat = _context.Categories.First(x => x.name == category.name);
+                }
+                catch
+                {
+                    cat = null;
+                }
+                if (cat==null)
+                {
                     _context.Categories.Add(category);
                     _context.SaveChanges();
+                    tmp.Add(_context.Categories.First(x=>x.name == category.name));
                 }
-                tmp.Add(_context.Categories.Where(x=>x.id==category.id).FirstOrDefault());
+                else
+                {
+                    tmp.Add(cat);
+                }
+                
             }
             _context.SaveChanges(); 
             book.categories = tmp;

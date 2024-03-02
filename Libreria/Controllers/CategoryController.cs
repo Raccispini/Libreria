@@ -1,12 +1,14 @@
 ﻿using Libreria.Application.Abstractions.Services;
 using Libreria.Application.Models.Requests;
 using Libreria.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libreria.Web.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/v1/[controller]")]
     public class CategoryController : ControllerBase
     {
@@ -21,16 +23,34 @@ namespace Libreria.Web.Controllers
         public IActionResult newCategory(CreateCategoryRequest request)
         {
             var category = request.ToEntity();
-            _categoryService.AddCategory(category);
-            return Ok(category);
+            if (_categoryService.GetCategoryByName(request.name) == null)
+            {
+                _categoryService.AddCategory(category);
+                return Ok();
+            }
+            return BadRequest("Esiste già una categoria con questo nome!");
         }
 
-        [HttpGet]
+        [HttpDelete]
         [Route("delete")]
         public IActionResult deleteCategory(int id)
         {
-            _categoryService.DeleteCategory(id);
-            return Ok();
+
+            var category = _categoryService.GetCategory(id);
+            if (category == null)
+            {
+                return BadRequest("Categoria non esistente");
+            }
+            if (category.books.Count() == 0)
+            {
+                _categoryService.DeleteCategory(id);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("La categoria è ancora associata a dei libri");
+            }
+            
         }
         [HttpGet]
         [Route("all")]

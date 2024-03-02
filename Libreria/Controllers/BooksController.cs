@@ -39,7 +39,7 @@ namespace ParadigmiLibreria.Controllers
             return _bookService.GetBook(id);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("New")]
         public IActionResult CreateBook(CreateBookRequest request)
         {
@@ -47,7 +47,7 @@ namespace ParadigmiLibreria.Controllers
             _bookService.AddBook(book);
             return Ok(book);
         }
-        [HttpPost]
+        [HttpPut]
         [Route("Edit")]
         public IActionResult EditBook(EditBookRequest request)
         {     
@@ -57,19 +57,27 @@ namespace ParadigmiLibreria.Controllers
         [Route("Delete")]
         public IActionResult DeleteBook(int id)
         {
-            _bookService.RemoveBook(id);
-            return Ok();
+            var book = _bookService.GetBook(id);
+                _bookService.RemoveBook(id);
+                return Ok(book);
         }
         [HttpPost]
         [Route("Find")]
         public IActionResult FindBook(FindBookRequest request)
         {
              var book = request.ToEntity();
-            if (request.after >= request.before)
+            //if (request.after >= request.before)
+            //{
+            //    return BadRequest("Le date sono discordanti");
+            //}
+            if (request.AtLeasOneFilter())
             {
-                return BadRequest("Le date sono discordanti");
+                return Ok(_bookService.Find(book,request.after,request.before,(int)request.pageSize,(int)request.pageCount));
             }
-             return Ok(_bookService.Find(book,request.after,request.before,(int)request.pageSize,(int)request.pageCount));
+            else
+            {
+                return BadRequest("Devi scegliere almeno un filtro");
+            }
         }
         
     }
