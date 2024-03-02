@@ -1,15 +1,20 @@
 ﻿using Libreria.Application.Abstractions.Services;
 using Libreria.Application.Models.Requests;
 using Libreria.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Libreria.Web.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/v1/[controller]")]
     public class UserController:ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly UserManager<User> _userManager;    
         public UserController(IUserService userService)
         {
             _userService = userService; 
@@ -54,25 +59,31 @@ namespace Libreria.Web.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        [Route("login")]
-        public IActionResult login()
-        {
-            return Ok();
-        }
+        //[HttpPost]
+        //[Route("login")]
+        //public async Task<IActionResult> login(Application.Models.Requests.LoginRequest request)
+        //{
+        //    var user = _userService.GetUserByName(request.username);
+        //    if (user == null || await _userManager.CheckPasswordAsync(user,request.password))
+        //    {
+        //        Unauthorized();
+        //    }
+        //    //var token
+        //    return Ok();
+        //}
 
-        [HttpGet]
-        [Route("logout")]
-        public IActionResult logout()
-        {
-            return Ok();
-        }
+        //[HttpGet]
+        //[Route("logout")]
+        //public IActionResult logout()
+        //{
+        //    return Ok();
+        //}
 
-        [HttpPost]
-        [Route("signup")]
-        public User signup(CreateUserRequest request)
-        {
-            return new User();
-        }
+        //[HttpPost]
+        //[Route("signup")]
+        //public User signup(CreateUserRequest request)
+        //{
+        //    return new User();
+        //}
     }
 }

@@ -9,5 +9,7 @@ namespace Libreria.Application.Abstractions.Services
         void Update(User user);
         void Delete(int id);
         User Get(int id);
+        //bool login(string username,string password);
+        User GetUserByName(string name);
     }
 }

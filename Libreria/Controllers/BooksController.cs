@@ -7,9 +7,11 @@ using Libreria.Application.Abstractions.Services;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 namespace ParadigmiLibreria.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/v1/[controller]")]
     public class BooksController:ControllerBase
     {
@@ -21,6 +23,7 @@ namespace ParadigmiLibreria.Controllers
         }
         [HttpGet]
         [Route("All")]
+        
         public ICollection<Book> getLibri( )
         {
 
@@ -66,7 +69,7 @@ namespace ParadigmiLibreria.Controllers
             {
                 return BadRequest("Le date sono discordanti");
             }
-             return Ok(_bookService.Find(book,request.after,request.before,request.pageSize,request.pageCount));
+             return Ok(_bookService.Find(book,request.after,request.before,(int)request.pageSize,(int)request.pageCount));
         }
         
     }

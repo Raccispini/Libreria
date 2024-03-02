@@ -38,5 +38,13 @@ namespace Libreria.Application.Services
         {
             _userRepository.Modifica(user);
         }
+        //public bool login(string username, string password)
+        //{
+        //    return _userRepository.login(username, password);
+        //}
+        public User GetUserByName(string name)
+        {
+            return _userRepository.GetUserByName(name);
+        }
     }
 }

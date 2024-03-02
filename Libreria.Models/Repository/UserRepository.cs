@@ -14,5 +14,25 @@ namespace Libreria.Models.Repository
             return _context.Users.Where(x => x.username == username)
                 .Where(x => x.password == password).First();
         }
+
+        public User GetUserByName(string username)
+        {
+            try
+            {
+                return _context.Users.Where(x=>x.username == username).First();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        //public bool login(string username,string password)
+        //{
+        //    var user = _context.Users.Where(x => x.username == username).First();
+        //    if (user == null)
+        //        return false;
+        //    return true;
+        //}
     }
 }

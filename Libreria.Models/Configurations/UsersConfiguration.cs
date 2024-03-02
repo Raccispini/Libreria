@@ -10,7 +10,7 @@ namespace Libreria.Models.Configurations
         {
             builder.ToTable("Users");
             builder.HasKey(x => x.id);
-
+            builder.HasIndex(x => x.username).IsUnique();
             builder.Property(x => x.id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.username).HasColumnName("username");
