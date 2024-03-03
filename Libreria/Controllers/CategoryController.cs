@@ -1,6 +1,9 @@
 ﻿using Libreria.Application.Abstractions.Services;
+using Libreria.Application.Factories;
 using Libreria.Application.Models.Requests;
+using Libreria.Application.Models.Responses;
 using Libreria.Models.Entities;
+using Libreria.Web.Result;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -23,12 +26,16 @@ namespace Libreria.Web.Controllers
         public IActionResult newCategory(CreateCategoryRequest request)
         {
             var category = request.ToEntity();
-            if (_categoryService.GetCategoryByName(request.name) == null)
+            try
+            {
+                _categoryService.GetCategoryByName(category.name);
+            }
+            catch
             {
                 _categoryService.AddCategory(category);
-                return Ok();
+                return Ok(ResponseFactory.WithSuccess());
             }
-            return BadRequest("Esiste già una categoria con questo nome!");
+            throw new Exception("Esiste già una categoria con questo nome!");
         }
 
         [HttpDelete]
@@ -39,24 +46,25 @@ namespace Libreria.Web.Controllers
             var category = _categoryService.GetCategory(id);
             if (category == null)
             {
-                return BadRequest("Categoria non esistente");
+                throw new Exception("Categoria non esistente");
             }
             if (category.books.Count() == 0)
             {
                 _categoryService.DeleteCategory(id);
-                return Ok();
+                return Ok(ResponseFactory.WithSuccess());
             }
             else
             {
-                return BadRequest("La categoria è ancora associata a dei libri");
+                throw new Exception("La categoria è ancora associata a dei libri");
             }
             
         }
         [HttpGet]
         [Route("all")]
-        public IEnumerable<Category> GetAll()
+        public IActionResult GetAll()
         {
-            return _categoryService.GetAll();
+            var result = _categoryService.GetAll();
+            return Ok(ResponseFactory.WithSuccess(new CategoriesResponse(result)));
         }
     }
 }

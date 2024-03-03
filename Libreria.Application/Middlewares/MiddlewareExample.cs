@@ -15,7 +15,7 @@ namespace Libreria.Application.Middlewares
         public async Task Invoke(HttpContext context,IBookService bookService)
         {
             //Logica middleware
-            Console.Write("Middleware");
+            //Console.Write("Middleware");
             await _next.Invoke(context);
         }
     }

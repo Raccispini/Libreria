@@ -31,6 +31,10 @@ namespace Libreria.Models.Repository
         public void Elimina(int id)
         {
             var entity = Ottieni(id);
+            if(entity == null)
+            {
+                throw new Exception("L'id inserito non corrisponde a nessun'elemento");
+            }
             _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
             SaveChanges();
         }

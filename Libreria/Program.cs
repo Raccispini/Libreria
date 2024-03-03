@@ -13,11 +13,28 @@ using FluentValidation;
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using Libreria.Application.Services.Validators;
+using Libreria.Web.Result;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using System.Net;
+using Libreria.Application.Factories;
+using Microsoft.AspNetCore.Http;
+using System.Text.Json;
+using Libreria.Web.ErrorHandling;
+using static System.Net.Mime.MediaTypeNames;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = (context) =>
+        {
+            return new BadRequestResultFactory(context);
+        };
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,6 +61,9 @@ builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<UserRepository>();
 
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -57,6 +77,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     ValidAudience = builder.Configuration["JwtAuth:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtAuth:Key"]))
                 };
+                
             });
 
 builder.Services.AddSwaggerGen(option =>
@@ -86,11 +107,12 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
-
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
-app.UseMiddleware<MiddlewareExample>();
-
+//app.UseMiddleware<MiddlewareExample>();
+app.UseExceptionHandler();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -99,9 +121,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
+//Gestione errori response
+
 app.MapControllers();
+
 
 app.Run();

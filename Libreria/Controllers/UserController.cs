@@ -1,5 +1,7 @@
 ﻿using Libreria.Application.Abstractions.Services;
+using Libreria.Application.Factories;
 using Libreria.Application.Models.Requests;
+using Libreria.Application.Models.Responses;
 using Libreria.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,39 +26,25 @@ namespace Libreria.Web.Controllers
         [Route("Get")]
         public IActionResult Get(int id)
         {
-            return Ok(_userService.Get(id));
+            var result = _userService.Get(id);
+            return Ok(ResponseFactory.WithSuccess(new UserResponse(result)));
         }
 
         [HttpGet]
         [Route("GetAll")]
         public IActionResult GetAll()
         {
-            return Ok(_userService.GetAll());
+            var result = _userService.GetAll();
+            return Ok(ResponseFactory.WithSuccess(new UsersResponse(result)));
         }
 
-        [HttpPost]
-        [Route("New")]
-        public IActionResult NewUser(CreateUserRequest request)
-        {
-            var user = request.ToEntity();
-            _userService.Add(user);
-            return Ok(user);
-        }
-        [HttpPut]
-        [Route("Edit")]
-        public IActionResult EditUser(CreateUserRequest request)
-        {
-            var user = request.ToEntity();
-            _userService.Update(user);
-            return Ok(user);
-        }
 
         [HttpDelete]
         [Route("Delete")]
         public IActionResult DeleteUser(int id)
         {
             _userService.Delete(id);
-            return Ok();
+            return Ok(ResponseFactory.WithSuccess());
         }
 
         //[HttpPost]

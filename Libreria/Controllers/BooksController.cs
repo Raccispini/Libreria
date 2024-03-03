@@ -8,6 +8,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
+using Libreria.Application.Models.Responses;
+using Libreria.Application.Factories;
 namespace ParadigmiLibreria.Controllers
 {
     [ApiController]
@@ -19,24 +21,22 @@ namespace ParadigmiLibreria.Controllers
         public BooksController(IBookService bookService)
         {
             _bookService = bookService;
-            
         }
         [HttpGet]
         [Route("All")]
         
-        public ICollection<Book> getLibri( )
+        public IActionResult getLibri( )
         {
-
             var books = _bookService.getBooks();
-            return books;
+            return Ok(ResponseFactory.WithSuccess(new GetAllBooksResponse(books)));
         }
 
         [HttpGet]
         [Route("Get/{id:int}")]
-        public Book getBook(int id)
+        public IActionResult getBook(int id)
         {
-            //return _books.Where(x=>x.id == id).First();
-            return _bookService.GetBook(id);
+            var result = _bookService.GetBook(id);
+            return Ok(ResponseFactory.WithSuccess(new GetBookResponse(result)));
         }
 
         [HttpPost]
@@ -45,13 +45,14 @@ namespace ParadigmiLibreria.Controllers
         {
             var book = request.ToEntity();
             _bookService.AddBook(book);
-            return Ok(book);
+            return Ok(ResponseFactory.WithSuccess(new NewBookResponse(book)));
         }
         [HttpPut]
         [Route("Edit")]
         public IActionResult EditBook(EditBookRequest request)
-        {     
-            return Ok(_bookService.EditBook(request.ToEntity()));
+        {
+            var result = _bookService.EditBook(request.ToEntity());
+            return Ok(ResponseFactory.WithSuccess(new NewBookResponse(result)));
         }
         [HttpDelete]
         [Route("Delete")]
@@ -59,24 +60,21 @@ namespace ParadigmiLibreria.Controllers
         {
             var book = _bookService.GetBook(id);
                 _bookService.RemoveBook(id);
-                return Ok(book);
+                return Ok(ResponseFactory.WithSuccess());
         }
         [HttpPost]
         [Route("Find")]
         public IActionResult FindBook(FindBookRequest request)
         {
              var book = request.ToEntity();
-            //if (request.after >= request.before)
-            //{
-            //    return BadRequest("Le date sono discordanti");
-            //}
             if (request.AtLeasOneFilter())
             {
-                return Ok(_bookService.Find(book,request.after,request.before,(int)request.pageSize,(int)request.pageCount));
+                var result = _bookService.Find(book, request.after, request.before, (int)request.pageSize, (int)request.pageCount);
+                return Ok(ResponseFactory.WithSuccess(new GetAllBooksResponse(result)));
             }
             else
             {
-                return BadRequest("Devi scegliere almeno un filtro");
+                throw new Exception("Devi scegliere almeno un filtro");
             }
         }
         

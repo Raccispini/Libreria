@@ -35,7 +35,7 @@ namespace Libreria.Models.Repository
             var book = base._context.Books.Where(x=> x.id == id).FirstOrDefault();
             if (book == null)
             {
-                return null;
+                throw new Exception("L'indice inserito non corrisponde a nessun libro");
             }
             var categories =  base._context.Books
                     .Where(x => x.id == book.id)
@@ -110,7 +110,7 @@ namespace Libreria.Models.Repository
             }
             catch
             {
-                return null;
+                throw new Exception("L'indice inserito non corrisponde a nessun libro");
             }
             
             libro.title=book.title;           
@@ -138,8 +138,7 @@ namespace Libreria.Models.Repository
                 }
                 libro.categories.Add(cat);
             }
-            
-            //libro.categories = book.categories;
+
             _context.Update(libro);
             SaveChanges();
             return libro;
@@ -179,11 +178,7 @@ namespace Libreria.Models.Repository
             _context.Entry(book).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
         }
-        //public new void Elimina(int id)
-        //{
-        //    var book = _context.Books.Find(id);
-        //    _context.Books.Remove(book);
-        //}
+
         
     }
 

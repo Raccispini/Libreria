@@ -18,19 +18,12 @@ namespace Libreria.Models.Repository
             }
             catch
             {
-                return null;
+                throw new Exception("Non esiste nessuna categoria con questo id");
             }
         }
         public Category GetByName(string name)
         {
-            try
-            {
-                return _context.Categories.Where(x => x.name == name).First();
-            }
-            catch
-            {
-                return null;
-            }
+             return _context.Categories.Where(x => x.name == name).First();           
         }
     }
 }

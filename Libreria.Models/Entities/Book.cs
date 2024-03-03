@@ -6,8 +6,6 @@ namespace Libreria.Models.Entities
 {
     public class Book
     {
-
-
         public int? id { get; set; }
 
         public string title { get; set; } = string.Empty;
@@ -19,5 +17,6 @@ namespace Libreria.Models.Entities
         public DateTime relase { get; set; } = DateTime.Now;
 
         public ICollection<Category> categories { get; set; } = [];
+
     }
 }

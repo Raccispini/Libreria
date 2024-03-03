@@ -1,12 +1,9 @@
 ﻿using Libreria.Application.Abstractions.Services;
-using Libreria.Application.Models.Dtos;
+using Libreria.Application.Factories;
 using Libreria.Application.Models.Requests;
-using Libreria.Application.Services;
+using Libreria.Application.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace Libreria.Web.Controllers
 {
@@ -17,46 +14,27 @@ namespace Libreria.Web.Controllers
 
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public LoginController(IConfiguration configuration,IUserService userService)
+        private readonly ITokenService _tokenService;
+        public LoginController(IConfiguration configuration,IUserService userService,ITokenService tokenService)
         {
             _configuration = configuration;
             _userService = userService;
+            _tokenService = tokenService;
 
         }
         [HttpPost]
         [Route("login")]
-        public IActionResult Login(LoginDTO loginDTO)
+        public IActionResult Login(LoginRequest request)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(loginDTO.username) ||
-                string.IsNullOrEmpty(loginDTO.password))
-                    return BadRequest("Username and/or Password not specified");
-
-                var user = _userService.GetUserByName(loginDTO.username);
-                if (user != null && loginDTO.password.Equals(user.password))
+                var user = _userService.GetUserByName(request.username);
+                if (user != null && request.password.Equals(user.password))
                 {
-                    var secretKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes(_configuration["JwtAuth:Key"]));
-                    var signinCredentials = new SigningCredentials
-                    (secretKey, SecurityAlgorithms.HmacSha256);
-                    var jwtSecurityToken = new JwtSecurityToken(
-                        issuer: _configuration["JwtAuth:Issuer"],
-                        audience: _configuration["JwtAuth:Issuer"],
-                        claims: new List<Claim>(),
-                        expires: DateTime.Now.AddMinutes(10),
-                        signingCredentials: signinCredentials
-                    );
-                    return Ok(new JwtSecurityTokenHandler().
-                    WriteToken(jwtSecurityToken));
+                    return Ok(ResponseFactory.WithSuccess(new LoginResponse(_tokenService.GetToken(request))));
+
                 }
-            }
-            catch(Exception e)
-            {
-                return BadRequest
-                (e.Message);
-            }
-            return Unauthorized();
+
+            throw new Exception("Email o password non valide");
+            //return BadRequest(ResponseFactory.WithErrors("Unautorized"));
         }
 
         [HttpPost]
@@ -66,11 +44,11 @@ namespace Libreria.Web.Controllers
             if(_userService.GetUserByName(request.username) == null)
             {
                 _userService.Add(request.ToEntity());
-                return Ok();
+                return Ok(ResponseFactory.WithSuccess());
             }
             else
             {
-                return BadRequest("L'utente inserito esiste già");
+                throw new Exception("L'username inserito esiste già");
             }
         }
     }
