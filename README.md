@@ -15,4 +15,6 @@
    - Initial catalog: il nome del database appena ripristinato
    - User id : nome utente per accedere al server
    - Password : password per accedere al server
-  
+
+## Utilizzo API
+Per poter utilizzare le API è necessario effettuare il login con l'apposita chiamata. Nel database è già inserito un utente Username :"admin", Password :"admin", altrimenti può crearne uno nuovo con la rotta /signup
