@@ -1,4 +1,4 @@
-# Progetto N. 1 Libreria
+# Progetto N. 1 Libreria Nicolò Raccichini 123687
 ## Istruzioni per l'avvio:
 1. Clonare al repository
 2. Importare il database:
